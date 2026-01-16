@@ -8,9 +8,9 @@ import { createsession, createusersession, checksession, getUserfromemail } from
 
 const client = new OAuth2Client(process.env.GOOGLE_CLIENT_ID)
 
-export function hasConsent(req) {
-  const cookieStore = req.cookies.get('cookie_consent');;
-  return cookieStore.value === 'accepted';
+async function hasConsent() {
+  const cookieStore = await cookies();
+  return cookieStore.get("cookie_consent")?.value === "accepted";
 }
 
 
@@ -52,7 +52,7 @@ export async function POST(req) {
   const { provider, token} = await req.json()
   let payload,firstname,lastname
   console.log('LOGIN ROUTE HIT')
-  if (!(await hasConsent(req))) {
+  if (!(await hasConsent())) {
     return Response.json(
       { error: 'Cookie consent required for analytics' },
       { status: 403 }
