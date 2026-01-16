@@ -7,8 +7,6 @@ export async function GET(req) {
   if (!cookie) {
     return new Response('Unauthorized', { status: 401 })
   }
-
   const sessionToken = cookie.value;
-
   return Response.json({ sessionToken });
 }
