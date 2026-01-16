@@ -87,13 +87,12 @@ export default function Page() {
     provider.addScope("public_profile");
 
     const result = await signInWithPopup(auth, provider)
-    const accessToken = result._tokenResponse.accessToken
-
+    const accessToken = result._tokenResponse.idToken
     const res = await fetch('/api/auth/login', {
       method: 'POST',
       headers: { 'Content-Type': 'application/json' },
       body: JSON.stringify({
-        provider: 'facebook',
+        provider: 'facebook.com',
         token: accessToken,
       }),
     })

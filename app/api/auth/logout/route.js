@@ -9,6 +9,5 @@ export async function POST(request) {
     await deleteSession(session.value);
     response.cookies.delete('session');
   }
-
   return response
 }

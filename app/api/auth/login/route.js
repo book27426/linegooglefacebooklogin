@@ -1,6 +1,6 @@
 // 'use server'
 export const runtime = 'nodejs'
-
+import admin from "@/lib/firebase-admin";
 import { cookies } from 'next/headers'
 import { OAuth2Client } from 'google-auth-library'
 import crypto from 'crypto';
@@ -15,8 +15,6 @@ export function hasConsent(req) {
 
 
 export async function verifyGoogleToken(idToken) {
-  // console.log(idToken)
-  // console.log(process.env.GOOGLE_CLIENT_ID)
   const ticket = await client.verifyIdToken({
     idToken,
     audience: process.env.GOOGLE_CLIENT_ID,
@@ -41,15 +39,13 @@ export async function verifyLineToken(idToken) {
 }
 
 export async function verifyFacebookToken(accessToken) {
-  const res = await fetch(
-    `https://graph.facebook.com/me?fields=id,name,email&access_token=${accessToken}`
-  )
-
-  if (!res.ok) {
+  const decoded = await admin.auth().verifyIdToken(accessToken);
+  // console.log(decoded)
+  if (decoded.firebase.sign_in_provider !== "facebook.com") {
     throw new Error('Invalid Facebook token')
   }
 
-  return res.json()
+  return decoded
 }
 
 export async function POST(req) {
@@ -64,10 +60,14 @@ export async function POST(req) {
   }
   if (provider === 'google.com') {
     payload = await verifyGoogleToken(token)
+    console.log(payload)
   } else if (provider === 'line.com') {
     payload = await verifyLineToken(token)
   } else if (provider === 'facebook.com') {
     payload = await verifyFacebookToken(token)
+    fullname = payload.name.split(" ")
+    firstname = fullname[0]
+    lastname = fullname[1]
   } else {
     return new Response('Unsupported provider', { status: 400 })
   }
