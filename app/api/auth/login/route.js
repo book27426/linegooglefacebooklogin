@@ -38,10 +38,10 @@ export async function verifyLineToken(idToken) {
   return res.json()
 }
 
-export async function verifyFacebookToken(accessToken) {
+export async function verifyFirebaseLogin(accessToken) {
   const decoded = await admin.auth().verifyIdToken(accessToken);
   // console.log(decoded)
-  if (decoded.firebase.sign_in_provider !== "facebook.com") {
+  if (decoded.firebase.sign_in_provider !== "facebook.com"&&decoded.firebase.sign_in_provider !== "google.com") {
     throw new Error('Invalid Facebook token')
   }
 
@@ -49,8 +49,8 @@ export async function verifyFacebookToken(accessToken) {
 }
 
 export async function POST(req) {
-  const { provider, token, firstname, lastname} = await req.json()
-  let payload
+  const { provider, token} = await req.json()
+  let payload,firstname,lastname
   console.log('LOGIN ROUTE HIT')
   if (!(await hasConsent(req))) {
     return Response.json(
@@ -58,14 +58,11 @@ export async function POST(req) {
       { status: 403 }
     );
   }
-  if (provider === 'google.com') {
-    payload = await verifyGoogleToken(token)
-    console.log(payload)
-  } else if (provider === 'line.com') {
+  if (provider === 'line.com') {
     payload = await verifyLineToken(token)
-  } else if (provider === 'facebook.com') {
-    payload = await verifyFacebookToken(token)
-    fullname = payload.name.split(" ")
+  } else if (provider === 'facebook.com'||provider === 'google.com') {
+    payload = await verifyFirebaseLogin(token)
+    let fullname = payload.name.split(" ")
     firstname = fullname[0]
     lastname = fullname[1]
   } else {

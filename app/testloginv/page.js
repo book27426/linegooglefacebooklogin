@@ -58,7 +58,7 @@ export default function Page() {
   async function googlelogin() {
     const provider = new GoogleAuthProvider();
     const result = await signInWithPopup(auth, provider);
-    const idToken = result._tokenResponse.oauthIdToken;
+    const idToken = result._tokenResponse.idToken;
     const gUser = result.user;
     const fullname = gUser.displayName.split(" ");
     const res = await fetch('/api/auth/login', {
