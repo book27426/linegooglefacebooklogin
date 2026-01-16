@@ -1,5 +1,7 @@
 // 'use server'
 export const runtime = 'nodejs'
+export const dynamic = 'force-dynamic';
+
 import admin from "@/lib/firebase-admin";
 import { cookies } from 'next/headers'
 import { OAuth2Client } from 'google-auth-library'
