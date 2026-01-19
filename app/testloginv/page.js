@@ -26,7 +26,6 @@ const auth = getAuth(app);
 
 export default function Page() {
   const router = useRouter()
-  const { login } = useAuth()
   const { refreshUser } = useAuth()
   async function linelogin() {
     if (!window.liff) return;
@@ -37,7 +36,8 @@ export default function Page() {
       window.liff.login({ scope: "profile openid email" });
       return;
     }
-    const idToken = result;
+
+    const idToken = window.liff.getIDToken();
     const res = await fetch('/api/auth/login', {
       method: 'POST',
       headers: { 'Content-Type': 'application/json' },
