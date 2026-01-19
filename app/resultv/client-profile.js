@@ -6,6 +6,7 @@ import { useRouter } from 'next/navigation';
 export default function ClientProfile({ user }) {
   const router = useRouter();
   async function handleLogout() {
+    console.log(window.liff)
     if (user?.provider === 'line.com' && window.liff) {
       window.liff.logout();
     }
