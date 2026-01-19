@@ -45,10 +45,14 @@ export async function verifyLineToken(idToken) {
       }),
     }
   )
+  const data = await res.json()
+  console.log('LINE verify response:', data)
 
-  throw new Error(`Invalid LINE token: ${data.error_description || data.error}`)
+  if (!res.ok) {
+    throw new Error(`Invalid LINE token: ${data.error_description || data.error}`)
+  }
 
-  return res.json()
+  return data
 }
 
 export async function verifyFirebaseLogin(accessToken) {
