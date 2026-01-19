@@ -49,9 +49,6 @@ export default function Page() {
     })
     
     if (!res.ok) throw new Error('LINE login failed')
-
-    const user = await res.json()
-    login(user)
     router.push('/resultv')
   }
 
@@ -99,7 +96,6 @@ export default function Page() {
 
     if (!res.ok) throw new Error('Facebook login failed')
 
-    const user = await res.json()
     router.push('/resultv')
   }
 

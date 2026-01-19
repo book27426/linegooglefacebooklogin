@@ -47,7 +47,6 @@ export async function verifyLineToken(idToken) {
 
 export async function verifyFirebaseLogin(accessToken) {
   const decoded = await admin.auth().verifyIdToken(accessToken);
-  // console.log(decoded)
   if (decoded.firebase.sign_in_provider !== "facebook.com"&&decoded.firebase.sign_in_provider !== "google.com") {
     throw new Error('Invalid Facebook token')
   }
@@ -67,7 +66,7 @@ export async function POST(req) {
   }
   if (provider === 'line.com') {
     payload = await verifyLineToken(token)
-    console.log(provider)
+    console.log(payload)
   } else if (provider === 'facebook.com'||provider === 'google.com') {
     payload = await verifyFirebaseLogin(token)
     let fullname = payload.name.split(" ")
