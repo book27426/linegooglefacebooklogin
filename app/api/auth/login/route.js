@@ -35,10 +35,13 @@ export async function verifyLineToken(idToken) {
     'https://api.line.me/oauth2/v2.1/verify',
     {
       method: 'POST',
-      headers: { 'Content-Type': 'application/x-www-form-urlencoded' },
-      body: new URLSearchParams({ 
+      headers: {
+        'Content-Type': 'application/x-www-form-urlencoded',
+      },
+      body: new URLSearchParams({
         id_token: idToken,
-        client_id: process.env.NEXT_PUBLIC_LINE_CHANNEL_ID,
+        client_id: process.env.LINE_CHANNEL_ID,
+        client_secret: process.env.LINE_CHANNEL_SECRET 
       }),
     }
   )
@@ -70,12 +73,6 @@ export async function POST(req) {
   }
   if (provider === 'line.com') {
     payload = await verifyLineToken(token)
-    cookies().set("session", payload.sub, {
-      httpOnly: true,
-      secure: true,
-      sameSite: "lax",
-      path: "/",
-    });
     firstname = payload.name
     lastname = '@line'
   } else if (provider === 'facebook.com'||provider === 'google.com') {
@@ -90,8 +87,8 @@ export async function POST(req) {
   if(!userId){
     userId = await createusersession({
       email: payload.email,
-      firstname: firstname,
-      lastname: lastname,
+      firstname,
+      lastname,
       provider,
     });
   }
