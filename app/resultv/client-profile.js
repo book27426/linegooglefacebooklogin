@@ -6,14 +6,15 @@ import { useRouter } from 'next/navigation';
 export default function ClientProfile({ user }) {
   const router = useRouter();
   async function handleLogout() {
-    if (window.liff) {
-      window.liff.logout();
-    }
 
     await fetch('/api/auth/logout', {
       method: 'POST',
       credentials: 'include',
     });
+
+    if (window.liff && window.liff.isLoggedIn()) {
+      window.liff.logout(); // clears LINE session
+    }
 
     router.replace('/testloginv');
   }
