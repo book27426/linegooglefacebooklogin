@@ -36,7 +36,7 @@ export default function Page() {
   const router = useRouter()
   const { refreshUser } = useAuth()
   useEffect(() => {
-    if(window.liff){
+    if(!window.liff){
       linelogin()
     }
   }, [])
