@@ -61,9 +61,7 @@ export default function Page() {
       router.push('/resultv')
   }
 
-  useEffect(() => {
-    linelogin()
-  }, [])
+  
 
   async function googlelogin() {
     const provider = new GoogleAuthProvider();

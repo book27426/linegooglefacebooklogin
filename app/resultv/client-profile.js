@@ -11,10 +11,12 @@ export default function ClientProfile({ user }) {
       method: 'POST',
       credentials: 'include',
     });
-
-    if (window.liff && window.liff.isLoggedIn()) {
-      window.liff.logout(); // clears LINE session
-    }
+    try{
+      if (window.liff && window.liff.isLoggedIn()) {
+        window.liff.logout();
+      }
+    }catch{}
+      
 
     router.replace('/testloginv');
   }
