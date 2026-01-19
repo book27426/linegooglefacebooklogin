@@ -43,7 +43,7 @@ export default function Page() {
       method: 'POST',
       headers: { 'Content-Type': 'application/json' },
       body: JSON.stringify({
-        provider: 'line',
+        provider: 'line.com',
         token: idToken,
       }),
     })
