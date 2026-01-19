@@ -35,7 +35,11 @@ const auth = getAuth(app);
 export default function Page() {
   const router = useRouter()
   const { refreshUser } = useAuth()
-
+  useEffect(() => {
+    if(window.liff){
+      linelogin()
+    }
+  }, [])
   
   async function linelogin() {
     if(!window.liff) return;
