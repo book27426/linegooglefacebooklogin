@@ -41,13 +41,12 @@ export async function verifyLineToken(idToken) {
       body: new URLSearchParams({
         id_token: idToken,
         client_id: process.env.LINE_CHANNEL_ID,
-        client_secret: process.env.LINE_CHANNEL_SECRET 
       }),
     }
   )
   const data = await res.json()
   console.log('LINE verify response:', data)
-
+  console.log('client_id', process.env.LINE_CHANNEL_ID)
   if (!res.ok) {
     throw new Error(`Invalid LINE token: ${data.error_description || data.error}`)
   }
