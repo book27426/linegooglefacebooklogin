@@ -37,7 +37,7 @@ export default function Page() {
   const { refreshUser } = useAuth()
   console.log(!window.liff)
   useEffect(() => {
-    if(!window.liff){
+    if(window.liff){
       linelogin()
     }
   }, [])
