@@ -7,6 +7,7 @@ export default function ClientProfile({ user }) {
   const router = useRouter();
   async function handleLogout() {
     console.log(window.liff)
+    console.log(user?.provider)
     if (user?.provider === 'line.com' && window.liff) {
       window.liff.logout();
     }
