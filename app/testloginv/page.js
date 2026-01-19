@@ -10,6 +10,7 @@ import {
 } from 'firebase/auth'
 import { useAuth } from './AuthContext'
 import { useRouter } from 'next/navigation'
+import { useEffect } from 'react'
 
 const firebaseConfig = {
   apiKey: "AIzaSyA1EAzdL9dV1GlBPTav6CtGu6Sde34nyVg",
@@ -21,14 +22,23 @@ const firebaseConfig = {
   measurementId: "G-ZJYQKHX5XV"
 };
 
+// const firebaseConfig = {
+//   apiKey: process.env.NEXT_PUBLIC_FIREBASE_API_KEY,
+//   authDomain: process.env.NEXT_PUBLIC_FIREBASE_AUTH_DOMAIN,
+//   projectId: process.env.NEXT_PUBLIC_FIREBASE_PROJECT_ID,
+//   appId: process.env.NEXT_PUBLIC_FIREBASE_APP_ID,
+// }
+
 const app = initializeApp(firebaseConfig);
 const auth = getAuth(app);
 
 export default function Page() {
   const router = useRouter()
   const { refreshUser } = useAuth()
+
+  
   async function linelogin() {
-    if (!window.liff) return;
+    if(!window.liff) return;
 
     await window.liff.init({ liffId: "2008832546-imfGfnFj" });
 
@@ -37,7 +47,7 @@ export default function Page() {
       return;
     }
 
-    const idToken = liff.getIDToken();
+    const idToken = window.liff.getIDToken()
     console.log('LINE ID TOKEN:', idToken)
     const res = await fetch('/api/auth/login', {
       method: 'POST',
@@ -47,10 +57,14 @@ export default function Page() {
         token: idToken,
       }),
     })
-    
+  
     if (!res.ok) throw new Error('LINE login failed')
-    router.push('/resultv')
+      router.push('/resultv')
   }
+
+  useEffect(() => {
+    linelogin()
+  }, [])
 
   async function googlelogin() {
     const provider = new GoogleAuthProvider();
