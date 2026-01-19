@@ -32,24 +32,22 @@ const firebaseConfig = {
 const app = initializeApp(firebaseConfig);
 const auth = getAuth(app);
 
+const isLiffReady = () =>
+  typeof window !== 'undefined' && window.liff;
+
 export default function Page() {
   const router = useRouter()
   const { refreshUser } = useAuth()
-  
   useEffect(() => {
     async function autoLineLogin() {
-      if (!window.liff) return;
-
+      if (!isLiffReady()) return;
       await window.liff.init({ liffId: '2008832546-imfGfnFj' });
-
       if (!window.liff.isLoggedIn()) {
         window.liff.login();
         return;
       }
-
       const idToken = window.liff.getIDToken();
       if (!idToken) return;
-
       const res = await fetch('/api/auth/login', {
         method: 'POST',
         headers: { 'Content-Type': 'application/json' },
@@ -59,14 +57,35 @@ export default function Page() {
           token: idToken,
         }),
       });
-      
       if (!res.ok) throw new Error('LINE login failed');
-
       router.push('/resultv');
     }
-
     autoLineLogin();
   }, [router]);
+  
+  async function linelogin() {
+    if(!window.liff) return;
+
+    await window.liff.init({ liffId: "2008832546-imfGfnFj" });
+
+    if (!window.liff.isLoggedIn()) {
+      window.liff.login({ scope: "profile openid email" });
+      return;
+    }
+
+    const idToken = window.liff.getIDToken()
+    const res = await fetch('/api/auth/login', {
+      method: 'POST',
+      headers: { 'Content-Type': 'application/json' },
+      body: JSON.stringify({
+        provider: 'line.com',
+        token: idToken,
+      }),
+    })
+  
+    if (!res.ok) throw new Error('LINE login failed')
+      router.push('/resultv')
+  }
 
   
 
