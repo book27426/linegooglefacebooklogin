@@ -48,7 +48,6 @@ export default function Page() {
     }
 
     const idToken = window.liff.getIDToken()
-    console.log('LINE ID TOKEN:', idToken)
     const res = await fetch('/api/auth/login', {
       method: 'POST',
       headers: { 'Content-Type': 'application/json' },

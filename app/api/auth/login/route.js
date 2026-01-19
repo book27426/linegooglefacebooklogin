@@ -45,8 +45,6 @@ export async function verifyLineToken(idToken) {
     }
   )
   const data = await res.json()
-  console.log('LINE verify response:', data)
-  console.log('client_id', process.env.NEXT_PUBLIC_LINE_CHANNEL_ID)
   if (!res.ok) {
     throw new Error(`Invalid LINE token: ${data.error_description || data.error}`)
   }
