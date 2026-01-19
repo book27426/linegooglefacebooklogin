@@ -14,17 +14,17 @@ async function hasConsent() {
 }
 
 function getGoogleClient() {
-  if (!process.env.GOOGLE_CLIENT_ID) {
+  if (!process.env.NEXT_PUBLIC_GOOGLE_CLIENT_ID) {
     throw new Error("Missing GOOGLE_CLIENT_ID");
   }
-  return new OAuth2Client(process.env.GOOGLE_CLIENT_ID);
+  return new OAuth2Client(process.env.NEXT_PUBLIC_GOOGLE_CLIENT_ID);
 }
 
 export async function verifyGoogleToken(idToken) {
   const client = getGoogleClient();
   const ticket = await client.verifyIdToken({
     idToken,
-    audience: process.env.GOOGLE_CLIENT_ID,
+    audience: process.env.NEXT_PUBLIC_GOOGLE_CLIENT_ID,
   })
 
   return ticket.getPayload()

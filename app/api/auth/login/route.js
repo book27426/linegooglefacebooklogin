@@ -14,17 +14,17 @@ async function hasConsent() {
 }
 
 function getGoogleClient() {
-  if (!process.env.GOOGLE_CLIENT_ID) {
+  if (!process.env.NEXT_PUBLIC_GOOGLE_CLIENT_ID) {
     throw new Error("Missing GOOGLE_CLIENT_ID");
   }
-  return new OAuth2Client(process.env.GOOGLE_CLIENT_ID);
+  return new OAuth2Client(process.env.NEXT_PUBLIC_GOOGLE_CLIENT_ID);
 }
 
 export async function verifyGoogleToken(idToken) {
   const client = getGoogleClient();
   const ticket = await client.verifyIdToken({
     idToken,
-    audience: process.env.GOOGLE_CLIENT_ID,
+    audience: process.env.NEXT_PUBLIC_GOOGLE_CLIENT_ID,
   })
 
   return ticket.getPayload()
@@ -40,13 +40,13 @@ export async function verifyLineToken(idToken) {
       },
       body: new URLSearchParams({
         id_token: idToken,
-        client_id: process.env.LINE_CHANNEL_ID,
+        client_id: process.env.NEXT_PUBLIC_LINE_CHANNEL_ID,
       }),
     }
   )
   const data = await res.json()
   console.log('LINE verify response:', data)
-  console.log('client_id', process.env.LINE_CHANNEL_ID)
+  console.log('client_id', process.env.NEXT_PUBLIC_LINE_CHANNEL_ID)
   if (!res.ok) {
     throw new Error(`Invalid LINE token: ${data.error_description || data.error}`)
   }
