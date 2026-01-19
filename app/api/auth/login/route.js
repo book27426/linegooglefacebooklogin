@@ -36,7 +36,10 @@ export async function verifyLineToken(idToken) {
     {
       method: 'POST',
       headers: { 'Content-Type': 'application/x-www-form-urlencoded' },
-      body: new URLSearchParams({ id_token: idToken }),
+      body: new URLSearchParams({ 
+        id_token: idToken,
+        client_id: process.env.NEXT_PUBLIC_LINE_CHANNEL_ID,
+      }),
     }
   )
 
@@ -67,10 +70,14 @@ export async function POST(req) {
   }
   if (provider === 'line.com') {
     payload = await verifyLineToken(token)
-    return Response.json(
-      { error: payload },
-      { status: 403 }
-    );
+    cookies().set("session", payload.sub, {
+      httpOnly: true,
+      secure: true,
+      sameSite: "lax",
+      path: "/",
+    });
+    firstname = payload.name
+    lastname = '@line'
   } else if (provider === 'facebook.com'||provider === 'google.com') {
     payload = await verifyFirebaseLogin(token)
     let fullname = payload.name.split(" ")
