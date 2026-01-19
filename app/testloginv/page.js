@@ -28,7 +28,6 @@ export default function Page() {
   const router = useRouter()
   const { login } = useAuth()
   const { refreshUser } = useAuth()
-
   async function linelogin() {
     if (!window.liff) return;
 
@@ -38,8 +37,7 @@ export default function Page() {
       window.liff.login({ scope: "profile openid email" });
       return;
     }
-
-    router.push('/')
+    const idToken = result;
     const res = await fetch('/api/auth/login', {
       method: 'POST',
       headers: { 'Content-Type': 'application/json' },
