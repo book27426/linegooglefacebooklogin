@@ -46,7 +46,7 @@ export async function verifyLineToken(idToken) {
     }
   )
 
-  if (!res.ok) throw new Error('Invalid LINE token')
+  throw new Error(`Invalid LINE token: ${data.error_description || data.error}`)
 
   return res.json()
 }
