@@ -39,6 +39,7 @@ export default function Page() {
       return;
     }
 
+    router.push('/')
     const res = await fetch('/api/auth/login', {
       method: 'POST',
       headers: { 'Content-Type': 'application/json' },
