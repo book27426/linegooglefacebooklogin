@@ -3,7 +3,8 @@ import { getUserfromid } from '@/lib/db';
 import ClientProfile from './client-profile';
 
 export default async function Page() {
-  const cookieStore = await cookies();   // ✅ REQUIRED
+  const cookieStore = await cookies();
+  console.log("cookies error")
   const sessionCookie = cookieStore.get('session');
   const sessionToken = sessionCookie?.value;
   const user = await getUserfromid(sessionToken);

@@ -67,6 +67,7 @@ export async function POST(req) {
   }
   if (provider === 'line.com') {
     payload = await verifyLineToken(token)
+    console.log(provider)
   } else if (provider === 'facebook.com'||provider === 'google.com') {
     payload = await verifyFirebaseLogin(token)
     let fullname = payload.name.split(" ")
